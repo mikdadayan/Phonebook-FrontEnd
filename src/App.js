@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Navigation from "./components/navigation/navigation";
+
+import { Route, BrowserRouter, Switch } from "react-router-dom";
+import { useCallback, useEffect } from "react";
+import NoMatch from "./pages/404/404-page";
+import Contacts from "./pages/contacts-page/contacts-page";
+import CreateContactAndGroup from "./pages/create-contact/create-contact-group-page";
+import { connect } from "react-redux";
 
 function App() {
+  useEffect(() => {}, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="page" id="page">
+        <Navigation />
+        <div className="App">
+          <Switch>
+            <Route exact path="/" render={() => <Contacts />}></Route>
+            <Route
+              exact
+              path="/create-contact"
+              render={() => <CreateContactAndGroup />}
+            ></Route>
+            <Route component={NoMatch} />
+          </Switch>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
-export default App;
+export default connect(null)(App);
