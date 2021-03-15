@@ -4,7 +4,6 @@ import ContactItem from "../../components/contact-item/contact-item.component";
 import GroupItem from "../../components/group-item/group-item.component";
 import Search from "../../components/search/search.component";
 import { getContacts, getGroups } from "../../redux/contact/contact.action";
-// import "./404-page.css";
 
 const Contacts = ({ getContacts, getGroups, contacts, groups }) => {
   useEffect(() => {
@@ -17,7 +16,7 @@ const Contacts = ({ getContacts, getGroups, contacts, groups }) => {
       <div className="cf ph2-ns">
         <div className="fl w-60 pa2">
           <a
-            class="f6 link dim ba bw2 ph3 pv2 mb2 dib dark-green"
+            className="f6 link dim ba bw2 ph3 pv2 mb2 dib dark-green"
             target="_blank"
             href="http://localhost:5000/api/contacts/download"
           >

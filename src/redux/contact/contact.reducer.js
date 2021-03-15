@@ -2,22 +2,25 @@ import ContactActionTypes from "./contact.types";
 
 const {
   CREATECONTACT_SUCCESS,
-  CREATECONTACT_FAIL,
   CONTACTSLOAD_SUCCESS,
   CONTACTSLOAD_FAIL,
   REMOVECONTACT_SUCCESS,
   REMOVECONTACT_FAIL,
   GROUPSLOAD_SUCCESS,
   REMOVEGROUP_SUCCESS,
-  GROUPSLOAD_FAIL,
   CREATEGROUP_SUCCESS,
   SEARCH_SUCCESS,
+  EDITCONTACT_SUCCESS,
+  UPDATECONTACT_SUCCESS,
+  EDITGROUP_SUCCESS,
+  UPDATEGROUP_SUCCESS,
 } = ContactActionTypes;
 
 const INITIAL_STATE = {
   contacts: [],
   groups: [],
   contactItem: {},
+  groupItem: {},
 };
 
 const contactReducer = (state = INITIAL_STATE, action) => {
@@ -49,10 +52,39 @@ const contactReducer = (state = INITIAL_STATE, action) => {
       };
     case CONTACTSLOAD_FAIL:
       return { ...state, contacts: [] };
-    case REMOVECONTACT_FAIL:
-      return state;
+
+    case EDITCONTACT_SUCCESS:
+      return { ...state, contactItem: payload.contact_item };
+    case EDITGROUP_SUCCESS:
+      return { ...state, groupItem: payload.group_item };
+    case UPDATECONTACT_SUCCESS:
+      return {
+        ...state,
+        contactItem: {},
+        contacts: state.contacts.map((contact) => {
+          if (contact._id === payload.updatedContact._id) {
+            return payload.updatedContact;
+          } else {
+            return contact;
+          }
+        }),
+      };
+    case UPDATEGROUP_SUCCESS:
+      return {
+        ...state,
+        groupItem: {},
+        groups: state.groups.map((group) => {
+          if (group._id === payload.updatedGroup._id) {
+            return payload.updatedGroup;
+          } else {
+            return group;
+          }
+        }),
+      };
     case SEARCH_SUCCESS:
       return { ...state, contacts: payload.contacts };
+    case REMOVECONTACT_FAIL:
+      return state;
     default:
       return state;
   }

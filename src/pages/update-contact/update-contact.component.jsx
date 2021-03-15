@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { createContact } from "../../redux/contact/contact.action";
+import { updateContact } from "../../redux/contact/contact.action";
 
-const CreateContact = ({ groups, createContact }) => {
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
-  const [phone_number, setPhoneNumber] = useState("");
-  const [contactGroups, setContactGroups] = useState([]);
-  const handleAddContact = (e) => {
+const UpdateContact = ({ groups, contactItem, history, updateContact }) => {
+  const prevGroups = contactItem.groupsNames.split("|");
+  const [first_name, setFirstName] = useState(contactItem.first_name);
+  const [last_name, setLastName] = useState(contactItem.last_name);
+  const [phone_number, setPhoneNumber] = useState(contactItem.phone_number);
+  const [contactGroups, setContactGroups] = useState(prevGroups);
+  const handleUpdateContact = (e) => {
     e.preventDefault();
-    createContact({ first_name, last_name, phone_number, contactGroups });
-    setFirstName("");
-    setLastName("");
-    setPhoneNumber("");
-    setContactGroups([]);
+    updateContact({
+      _id: contactItem._id,
+      first_name,
+      last_name,
+      phone_number,
+      contactGroups,
+    });
+    history.push("/");
   };
 
   const handleSelectChange = (e) => {
@@ -27,7 +31,7 @@ const CreateContact = ({ groups, createContact }) => {
     setContactGroups(selected);
   };
   return (
-    <form className="measure center" onSubmit={handleAddContact}>
+    <form className="measure center" onSubmit={handleUpdateContact}>
       <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
         <legend className="f4 fw6 ph0 mh0">Create Contact</legend>
         <div className="mt3">
@@ -81,6 +85,9 @@ const CreateContact = ({ groups, createContact }) => {
             * Hold down the Ctrl (windows) or Command (Mac) button to select
             multiple options.
           </p>
+          <p className="f6 light-red">
+            * Previous Groups - {contactItem.groupsNames}
+          </p>
           <select
             onChange={handleSelectChange}
             name="groups"
@@ -102,7 +109,7 @@ const CreateContact = ({ groups, createContact }) => {
           className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
           type="submit"
         >
-          Add Contact
+          Update Contact
         </button>
       </div>
     </form>
@@ -111,6 +118,7 @@ const CreateContact = ({ groups, createContact }) => {
 
 const mapStateToProps = (state) => ({
   groups: state.contact.groups,
+  contactItem: state.contact.contactItem,
 });
 
-export default connect(mapStateToProps, { createContact })(CreateContact);
+export default connect(mapStateToProps, { updateContact })(UpdateContact);

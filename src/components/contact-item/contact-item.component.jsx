@@ -1,16 +1,21 @@
 import React from "react";
 import { connect } from "react-redux";
-import { deleteContact } from "../../redux/contact/contact.action";
-// import "./404-page.css";
+import { Link } from "react-router-dom";
+import { deleteContact, editContact } from "../../redux/contact/contact.action";
 
 const ContactItem = ({
   deleteContact,
+  editContact,
   contact: { _id, first_name, last_name, phone_number, groups },
 }) => {
   const groupsNames = groups.map((group) => group.group_name).join("|");
   const handleDeleteClick = (e) => {
     e.preventDefault();
     deleteContact(_id);
+  };
+
+  const handleEditClick = () => {
+    editContact({ _id, first_name, last_name, phone_number, groupsNames });
   };
   return (
     <article className="dt w-100 bb b--black-05 pb2 mt2" href="#0">
@@ -26,9 +31,11 @@ const ContactItem = ({
       </div>
       <div className="dtc v-mid">
         <div className="w-100 tr">
-          <button className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60">
-            Edit
-          </button>
+          <Link to="/edit-contact" onClick={handleEditClick}>
+            <button className="f6 button-reset bg-white ba b--black-10 dim pointer pv1 black-60">
+              Edit
+            </button>
+          </Link>
           <button
             className="f6 button-reset hot-pink ba b--black-10 dim pointer pv1 black-60 ml2"
             onClick={handleDeleteClick}
@@ -41,4 +48,4 @@ const ContactItem = ({
   );
 };
 
-export default connect(null, { deleteContact })(ContactItem);
+export default connect(null, { deleteContact, editContact })(ContactItem);

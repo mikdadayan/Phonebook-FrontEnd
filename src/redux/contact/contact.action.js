@@ -2,16 +2,17 @@ import ContactActionTypes from "./contact.types";
 
 const {
   CREATECONTACT_SUCCESS,
-  CREATECONTACT_FAIL,
   CONTACTSLOAD_SUCCESS,
   CONTACTSLOAD_FAIL,
   REMOVECONTACT_SUCCESS,
-  REMOVECONTACT_FAIL,
   GROUPSLOAD_SUCCESS,
   REMOVEGROUP_SUCCESS,
-  GROUPSLOAD_FAIL,
   CREATEGROUP_SUCCESS,
   SEARCH_SUCCESS,
+  EDITCONTACT_SUCCESS,
+  UPDATECONTACT_SUCCESS,
+  EDITGROUP_SUCCESS,
+  UPDATEGROUP_SUCCESS,
 } = ContactActionTypes;
 
 export const getContacts = () => async (dispatch) => {
@@ -110,6 +111,87 @@ export const createGroup = (group_name) => async (dispatch) => {
         type: CREATEGROUP_SUCCESS,
         payload: { newGroup },
       });
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+export const editContact = (contact_item) => async (dispatch) => {
+  try {
+    dispatch({
+      type: EDITCONTACT_SUCCESS,
+      payload: { contact_item },
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+export const editGroup = (group_item) => async (dispatch) => {
+  try {
+    dispatch({
+      type: EDITGROUP_SUCCESS,
+      payload: { group_item },
+    });
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+export const updateContact = ({
+  _id,
+  first_name,
+  last_name,
+  phone_number,
+  contactGroups,
+}) => async (dispatch) => {
+  try {
+    const respone = await fetch(`http://localhost:5000/api/contacts/${_id}`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        first_name,
+        last_name,
+        phone_number,
+        groups: contactGroups,
+      }),
+    });
+    const data = await respone.json();
+    if (respone.status === 200) {
+      const updatedContact = data.updatedContact;
+      dispatch({
+        type: UPDATECONTACT_SUCCESS,
+        payload: { updatedContact },
+      });
+      alert(data.message);
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+export const updateGroup = ({ _id, group_name }) => async (dispatch) => {
+  try {
+    const respone = await fetch(`http://localhost:5000/api/groups/${_id}`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        group_name,
+      }),
+    });
+    const data = await respone.json();
+    if (respone.status === 201) {
+      const updatedGroup = data.updatedGroup;
+      dispatch({
+        type: UPDATEGROUP_SUCCESS,
+        payload: { updatedGroup },
+      });
+      alert(data.message);
     }
   } catch (error) {
     alert(error.message);
