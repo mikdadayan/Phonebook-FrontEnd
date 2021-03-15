@@ -13,6 +13,7 @@ const UploadFile = () => {
       body: formData,
     };
     fetch("http://localhost:5000/api/contacts/upload", options);
+    alert("File uploaded");
   };
 
   return (
