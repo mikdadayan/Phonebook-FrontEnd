@@ -7,17 +7,21 @@ const UpdateContact = ({ groups, contactItem, history, updateContact }) => {
   const [first_name, setFirstName] = useState(contactItem.first_name);
   const [last_name, setLastName] = useState(contactItem.last_name);
   const [phone_number, setPhoneNumber] = useState(contactItem.phone_number);
-  const [contactGroups, setContactGroups] = useState(prevGroups);
+  const [contactGroups, setContactGroups] = useState(null);
   const handleUpdateContact = (e) => {
     e.preventDefault();
-    updateContact({
-      _id: contactItem._id,
-      first_name,
-      last_name,
-      phone_number,
-      contactGroups,
-    });
-    history.push("/");
+    if (!contactGroups) {
+      alert("Please choose groups");
+    } else {
+      updateContact({
+        _id: contactItem._id,
+        first_name,
+        last_name,
+        phone_number,
+        contactGroups,
+      });
+      history.push("/");
+    }
   };
 
   const handleSelectChange = (e) => {

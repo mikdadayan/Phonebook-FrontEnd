@@ -9,6 +9,7 @@ const ContactItem = ({
   contact: { _id, first_name, last_name, phone_number, groups },
 }) => {
   const groupsNames = groups.map((group) => group.group_name).join("|");
+  // const groupsId = groups.map((group) => group._id);
   const handleDeleteClick = (e) => {
     e.preventDefault();
     deleteContact(_id);
